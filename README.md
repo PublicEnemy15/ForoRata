@@ -144,3 +144,7 @@ Con ello ya estarias trabajando en el proyecto de forma correcta ✅
 ## 🦎Mockup del proyecto
 
 https://www.figma.com/design/hUlst4ZRzPRnKXFSKX95JH/Untitled?node-id=0-1&t=y1hYncIdXrJ8oMUr-1
+
+<br>
+<img src="https://github.com/PublicEnemy15/ForoRata/blob/main/src/assets/imagenes/ReadMe/estodo.png?raw=true" width="1980"> 
+<img src="https://github.com/AnderMendoza/AnderMendoza/raw/main/assets/line-neon.gif" width="100%">
