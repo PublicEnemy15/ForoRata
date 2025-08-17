@@ -8,7 +8,7 @@
 <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Archivo+Black&size=25&pause=1000&color=B83CEC&width=435&lines=Proyecto+ForoRata+para;Marcos+de+Desarrollo+Web" alt="Typing SVG" /></a>
 
 >[!NOTE]
-> <img src = "https://github.com/PublicEnemy15/ForoRata/blob/main/src/assets/imagenes/ratas/SmallRatCheese.webp?raw=true" width = 30> <a>    <a/>**1.- Definición general**
+> <img src = "https://github.com/PublicEnemy15/ForoRata/blob/main/src/assets/imagenes/ratas/SmallRatCheese.webp?raw=true" width = 30> <a>    <a/>**Definición general**
 <p align="justify">
 ...
 </p>
