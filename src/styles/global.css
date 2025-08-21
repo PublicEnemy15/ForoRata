@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary: #1B1B1F;
+    --color-primary-light: #32363F;
+    --color-secondary: #202127;
+
+    --color-pink: #D868A0;
+    --color-blue: #73A7DD;
+
+    --color-black: #000;
+    --color-white: #fff;
+
+    --default-font: 'Cascadia Mono', sans-serif;
+}
+
+body {
+    font-family: var(--default-font);
+    background-color: var(--color-primary);
+}
