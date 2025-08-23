@@ -3,9 +3,10 @@ import '@fontsource/cascadia-mono/400.css';
 import '@fontsource/cascadia-mono/500.css';
 import '@fontsource/cascadia-mono/600.css';
 
-import Header from "@/components/Header"
-import Panel1 from "@/components/Panel1"
-import PostCard from "@/components/Postcard"
+import Header from "@/components/Common/Header.astro"
+import UserCard from "@/components/Main/UserCard"
+import MainContainer from '@/components/Main/MainContainer';
+
 import "@/styles/global.css"
 ---
 
@@ -19,7 +20,9 @@ import "@/styles/global.css"
 	</head>
 	<body>
 		<Header />
-		<Panel1 />
+			<MainContainer>
+			<UserCard client:load />
+			</MainContainer>
 		<slot />
 	</body>
 </html>
