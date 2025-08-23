@@ -15,8 +15,8 @@ const Button = ({
 }) => {
  
   // Estilos base
-  const baseStyles = "box-border items-center justify-center font-bold no-underline transition-colors duration-100 focus:outline-none focus:ring-2";
- 
+  const baseStyles = "box-border items-center justify-center font-bold no-underline transition-colors duration-100 focus:outline-none";
+  
   // Variantes de tamanio
   const sizes = {
     'default': "h-10 w-44 text-lg rounded-[20px] border-2", // Tamanio original
