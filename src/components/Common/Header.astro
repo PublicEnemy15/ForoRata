@@ -1,8 +1,11 @@
 ---
+import { Image } from 'astro:assets';
 import SearchBar from './SearchBar';
-import Button from './Button'; // Asegúrate que apunte al archivo correcto
-import MainContainer from '../Main/MainContainer'; 
+import Button from './Button';
+import MainContainer from '../Main/MainContainer';
+import SmallRatLogo from '../../assets/imagenes/ratas/SmallRat.webp';
 ---
+
 <header   
   class="fixed top-0 left-0 right-0 z-[10000] flex h-16 items-center justify-center bg-background shadow-[0_0_5px_1px_rgba(0,0,0,1),0_0_10px_3px_rgba(0,0,0,0.8),0_0_20px_5px_rgba(0,0,0,0.5)]" 
 >   
@@ -21,14 +24,14 @@ import MainContainer from '../Main/MainContainer';
           data-target="GoTo-Home"       
           data-origin="from: header"     
         >       
-          <img         
-            src="src/assets/imagenes/ratas/SmallRat.webp"         
-            alt="Logo Rata"         
-            class="block h-10 w-10"         
-            width={40}         
-            height={40}         
-            loading="eager"         
-            decoding="sync"       
+          <Image
+            src={SmallRatLogo}
+            alt="Logo Rata"
+            class="block h-10 w-10"
+            width={40}
+            height={40}
+            loading="eager"
+            decoding="sync"
           />       
           <span class="default-font text-white text-5xl font-bold leading-10">         
             ForoRata       
