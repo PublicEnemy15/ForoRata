@@ -1,9 +1,9 @@
 import React from 'react';
 
-const RightSidebarCard = () => {
+const FollowCard = () => {
   return (
-    <div className="w-80 bg-secondary rounded-lg p-6" style={{boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'}}>
-      {/* Título */}
+    <div className="w-[360px] bg-CardBackground rounded-lg p-6" style={{boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'}}>
+      {/* Titulo */}
       <div className="text-center mb-6">
         <p className="text-white text-lg">
           Después de iniciar sesión, acá podrás ver
@@ -14,4 +14,4 @@ const RightSidebarCard = () => {
   );
 };
 
-export default RightSidebarCard;
+export default FollowCard;
