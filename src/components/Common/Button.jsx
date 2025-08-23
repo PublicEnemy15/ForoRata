@@ -27,11 +27,11 @@ const Button = ({
  
   // Variantes de color
   const variants = {
-    'Boton-rellenado-accent2': "border-accent2 bg-accent2 text-white hover:bg-accent2-600 focus:ring-accent2", //todo rellenado de rosado
-    'Boton-borde-accent2': "border-accent2 bg-transparent text-accent2 hover:bg-accent2 hover:text-white focus:ring-accent2", //borde rosado  
+    'Boton-rellenado-accent2': "border-accent2 bg-accent2 text-white hover:bg-accent2-600", //todo rellenado de rosado
+    'Boton-borde-accent2': "border-accent2 bg-transparent text-accent2 hover:bg-accent2 hover:text-white", //borde rosado  
       
-    'Boton-rellenado-accent1': "border-accent1 bg-accent1 text-white hover:bg-accent1-600 focus:ring-accent1", //todo rellenado de celeste
-    'Boton-borde-accent1': "border-accent1 bg-transparent text-accent1 hover:bg-accent1 hover:text-white focus:ring-accent1", //borde celeste
+    'Boton-rellenado-accent1': "border-accent1 bg-accent1 text-white hover:bg-accent1-600", //todo rellenado de celeste
+    'Boton-borde-accent1': "border-accent1 bg-transparent text-accent1 hover:bg-accent1 hover:text-white", //borde celeste
     
     // Nuevas variantes para el boton de seguir
     'follow-unselected': "bg-unselect hover:bg-select border-none", // Estado no siguiendo
