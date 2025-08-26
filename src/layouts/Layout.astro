@@ -1,0 +1,28 @@
+---
+import '@fontsource/cascadia-mono/400.css';
+import '@fontsource/cascadia-mono/500.css';
+import '@fontsource/cascadia-mono/600.css';
+
+import Header from "@/components/Common/Header.astro"
+import UserCard from "@/components/Main/UserCard"
+import MainContainer from '@/components/Main/MainContainer';
+
+import "@/styles/global.css"
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>ForoRata</title>
+	</head>
+	<body>
+		<Header />
+			<MainContainer>
+			<UserCard client:load />
+			</MainContainer>
+		<slot />
+	</body>
+</html>

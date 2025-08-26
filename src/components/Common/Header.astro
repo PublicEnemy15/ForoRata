@@ -1,0 +1,68 @@
+---
+import { Image } from 'astro:assets';
+import SearchBar from './SearchBar';
+import Button from './Button';
+import MainContainer from '../Main/MainContainer';
+import SmallRatLogo from '../../assets/imagenes/ratas/SmallRat.webp';
+---
+
+<header   
+  class="fixed top-0 left-0 right-0 z-[10000] flex h-16 items-center justify-center bg-background shadow-[0_0_5px_1px_rgba(0,0,0,1),0_0_10px_3px_rgba(0,0,0,0.8),0_0_20px_5px_rgba(0,0,0,0.5)]" 
+>   
+  <MainContainer>
+    {/* Grid layout que replica la estructura del UserCard (osea los paneles) */}
+    <div class="grid grid-cols-[360px_1fr_360px] gap-[30px] items-center w-full">
+      
+      {/* Columna izquierda: Logo (alineado con el primer panel) */}
+      <div class="flex justify-start">
+        <a       
+          href="/"       
+          aria-label="Ir a inicio"       
+          class="flex items-center gap-2 no-underline"       
+          data-track="event"       
+          data-category="Navigation"       
+          data-target="GoTo-Home"       
+          data-origin="from: header"     
+        >       
+          <Image
+            src={SmallRatLogo}
+            alt="Logo Rata"
+            class="block h-10 w-10"
+            width={40}
+            height={40}
+            loading="eager"
+            decoding="sync"
+          />       
+          <span class="default-font text-white text-5xl font-bold leading-10">         
+            ForoRata       
+          </span>     
+        </a>
+      </div>
+
+      {/* Columna central: SearchBar (alineado con PostCard) */}
+      <div class="flex justify-center">
+        <div class="w-[614px]">
+          <SearchBar client:load />
+        </div>
+      </div>
+
+      {/* Columna derecha: Boton (alineado con el tercer panel) */}
+      <div class="flex justify-end">
+        <Button
+          href="/login"
+          variant="Boton-rellenado-accent2"
+          ariaLabel="Iniciar sesión"
+          dataTrack={{
+            category: "Authentication",
+            target: "GoTo-Login",
+            origin: "from: header"
+          }}
+          client:load
+        >
+          Iniciar Sesión
+        </Button>
+      </div>
+
+    </div>
+  </MainContainer>
+</header>
