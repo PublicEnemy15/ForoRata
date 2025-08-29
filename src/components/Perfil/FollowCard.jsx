@@ -20,7 +20,10 @@ const FollowCard = () => {
       {/* Header */}
       <div 
         className="rounded-lg px-4 py-4 flex items-center justify-center gap-3"
-        style={{ backgroundColor: '#333340ff' }}
+        style={{ 
+          backgroundColor: '#32363F', 
+          boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)' 
+        }}
       >
         {/* Ratita en SVG */}
         <svg 
@@ -54,7 +57,10 @@ const FollowCard = () => {
           <div 
             key={follower.id}
             className="rounded-lg px-5 py-3 flex items-center justify-between transition-all duration-200 hover:brightness-110"
-            style={{ backgroundColor: 'var(--color-CardBackground)' }}
+            style={{ 
+              backgroundColor: '#202127',
+              boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'
+            }}
           >
             {/* Avatar y nombre */}
             <div className="flex items-center gap-4">
@@ -79,34 +85,49 @@ const FollowCard = () => {
               </span>
             </div>
 
-            {/* Botón seguir */}
+            {/* Botón seguir*/}
             <button
               onClick={() => toggleFollow(follower.id)}
-              className="flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 hover:opacity-80"
-              style={{ 
+              className="flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-300 hover:opacity-80"
+              style={{
                 backgroundColor: follower.isFollowing ? '#4CAF50' : '#32363F',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+                boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'
               }}
+              aria-label={follower.isFollowing ? "Dejar de seguir" : "Seguir"}
             >
               {follower.isFollowing ? (
                 // Icono de check si ya sigue
                 <svg 
-                  className="w-6 h-6 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20" 
+                  height="20" 
+                  viewBox="0 0 24 24"
                   fill="none" 
                   stroke="currentColor" 
-                  viewBox="0 0 24 24"
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  className="text-white"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <path d="M5 13l4 4L19 7" />
                 </svg>
               ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
-       viewBox="0 0 24 24" 
-       fill="none" stroke="white" stroke-linecap="round" 
-       stroke-linejoin="round" stroke-width="2">
-    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-    <circle cx="8.5" cy="7" r="4"/>
-    <path d="m17 11l2 2l4-4"/>
-  </svg>
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  width="20" 
+                  height="20" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  className="text-white"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="8.5" cy="7" r="4"/>
+                  <path d="m17 11l2 2l4-4"/>
+                </svg>
               )}
             </button>
           </div>
