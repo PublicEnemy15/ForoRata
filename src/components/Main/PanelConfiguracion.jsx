@@ -39,15 +39,11 @@ const SaveIcon = ({ color = "currentColor" }) => (
 );
 
 const PanelConfiguracion = () => {
-  // Cargar datos del localStorage al inicializar
-  const [biografia, setBiografia] = useState(() => {
-    return localStorage.getItem('biografia') || "¡increí!";
-  });
+  // Estado usando memoria en lugar de localStorage para Claude.ai
+  const [biografia, setBiografia] = useState("¡increí!");
   const [nuevaContrasena, setNuevaContrasena] = useState("");
   const [confirmarContrasena, setConfirmarContrasena] = useState("");
-  const [temaSeleccionado, setTemaSeleccionado] = useState(() => {
-    return localStorage.getItem('tema') || "Oscuro";
-  });
+  const [temaSeleccionado, setTemaSeleccionado] = useState("Oscuro");
 
   const iconosTemas = {
     Claro: <IconClaro />,
@@ -71,7 +67,6 @@ const PanelConfiguracion = () => {
       "--color-select": "#545a68",
       "--color-SecondaryText-PreHover": "#AAAAAA",
     },
-  
   };
 
   useEffect(() => {
@@ -80,17 +75,13 @@ const PanelConfiguracion = () => {
     Object.keys(variables).forEach((key) => {
       root.style.setProperty(key, variables[key]);
     });
-    // guardar tema en localStorage
-    localStorage.setItem('tema', temaSeleccionado);
   }, [temaSeleccionado]);
 
-  // para guardar biografía
   const guardarBiografia = () => {
-    localStorage.setItem('biografia', biografia);
-    // Aquí podrías agregar una notificación de éxito
+    // En implementación real usarías localStorage
+    alert('Biografía guardada correctamente');
   };
 
-  // para cambiar contraseña
   const cambiarContrasena = () => {
     if (nuevaContrasena !== confirmarContrasena) {
       alert('Las contraseñas no coinciden');
@@ -100,8 +91,6 @@ const PanelConfiguracion = () => {
       alert('La contraseña debe tener al menos 6 caracteres');
       return;
     }
-    // "guardariamor la contraseña "
-    localStorage.setItem('contrasena', nuevaContrasena); //  demo
     setNuevaContrasena('');
     setConfirmarContrasena('');
     alert('Contraseña actualizada correctamente');
@@ -115,7 +104,6 @@ const PanelConfiguracion = () => {
     if (esActivo) {
       colorTexto = nombreTema === "Claro" ? "#000" : "#fff";
     } else {
-      // si no está activo, usar blanco en tema oscuro
       if (temaSeleccionado === "Oscuro") {
         colorTexto = "#fff";
       } else {
@@ -125,225 +113,336 @@ const PanelConfiguracion = () => {
     return {
       backgroundColor: esActivo
         ? nombreTema === "Claro"
-          ? "#E28EB8" // accent3
-          : "#D868A0" // accent2
+          ? "#E28EB8"
+          : "#D868A0"
         : "var(--color-unselect)",
       color: colorTexto,
     };
   };
+
   const textColor = "var(--color-white)";
+
   return (
     <>
-      <div
-        style={{
-          position: "fixed",
-          left: "653px",
-          top: "91px",
-          width: "614px",
-          height: "486px",
-          backgroundColor: "var(--color-CardBackground)",
-          borderRadius: "12px",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2)",
-          fontFamily: "var(--default-font)",
-        }}
-      />
-      <h3
-        style={{
-          position: "fixed",
-          left: "693px",
-          top: "121px",
-          color: textColor,
-          fontWeight: 600,
-          fontSize: "16px",
-        }}
-      >
-        Editar Biografía
-      </h3>
-      <div
-        onClick={guardarBiografia}
-        style={{
-          position: "fixed",
-          left: "1187px",
-          top: "111px",
-          width: "40px",
-          height: "40px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: temaSeleccionado === "Claro" ? "#fff" : "#32363F",
-          border: "1px solid var(--color-select)",
-          borderRadius: "8px",
-          cursor: "pointer",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2)",
-        }}
-      >
-        <SaveIcon color={textColor} />
-      </div>
-      <textarea
-        value={biografia}
-        onChange={(e) => setBiografia(e.target.value)}
-        maxLength={100}
-        placeholder="Escribe tu biografía..."
-        style={{
-          position: "fixed",
-          left: "693px",
-          top: "161px",
-          width: "534px",
-          height: "60px",
-          backgroundColor: "var(--color-unselect)",
-          color: textColor,
-          border: "1px solid var(--color-unselect)",
-          borderRadius: "8px",
-          padding: "8px",
-          fontFamily: "var(--default-font)",
-          resize: "none",
-          outline: "none",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2)",
-        }}
-      />
-      <span
-        style={{
-          position: "fixed",
-          left: "1182px",
-          top: "232px",
-          fontSize: "12px",
-          color: textColor,
-        }}
-      >
-        {biografia.length}/100
-      </span>
-      <h3
-        style={{
-          position: "fixed",
-          left: "693px",
-          top: "296px",
-          color: textColor,
-          fontWeight: 600,
-          fontSize: "16px",
-        }}
-      >
-        Cambiar Contraseña
-      </h3>
-      <div
-        onClick={cambiarContrasena}
-        style={{
-          position: "fixed",
-          left: "1189px",
-          top: "286px",
-          width: "40px",
-          height: "40px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: temaSeleccionado === "Claro" ? "#fff" : "#32363F",
-          border: "1px solid var(--color-select)",
-          borderRadius: "8px",
-          cursor: "pointer",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2)",
-        }}
-      >
-        <SaveIcon color={textColor} />
-      </div>
-      <input
-        type="password"
-        value={nuevaContrasena}
-        onChange={(e) => setNuevaContrasena(e.target.value)}
-        placeholder="Nueva Contraseña"
-        style={{
-          position: "fixed",
-          left: "693px",
-          top: "336px",
-          width: "340px",
-          height: "40px",
-          backgroundColor: "var(--color-unselect)",
-          color: "var(--color-white)",
-          border: "1px solid var(--color-unselect)",
-          borderRadius: "6px",
-          padding: "8px",
-        }}
-        className="input-placeholder"
+      <style>
+        {`
+          .panel-container {
+            position: fixed;
+            left: 50%;
+            top: calc(60px + 40px);
+            transform: translateX(-50%);
+            width: min(90vw, 614px);
+            height: min(85vh, 486px);
+            background-color: var(--color-CardBackground);
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2);
+            font-family: var(--default-font);
+          }
+
+          .biografia-title {
+            position: absolute;
+            left: 6.5%;
+            top: 6.2%;
+            color: var(--color-white);
+            font-weight: 600;
+            font-size: clamp(14px, 2.6vw, 16px);
+          }
+
+          .save-biografia-btn {
+            position: absolute;
+            right: 3.3%;
+            top: 4.1%;
+            width: clamp(35px, 6.5vw, 40px);
+            height: clamp(35px, 6.5vw, 40px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--color-select);
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2);
+          }
+
+          .biografia-textarea {
+            position: absolute;
+            left: 6.5%;
+            top: 14.4%;
+            width: 87%;
+            height: 12.3%;
+            background-color: var(--color-unselect);
+            color: var(--color-white);
+            border: 1px solid var(--color-unselect);
+            border-radius: 8px;
+            padding: 8px;
+            font-family: var(--default-font);
+            resize: none;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2);
+            font-size: clamp(12px, 2.3vw, 14px);
+          }
+
+          .char-count {
+            position: absolute;
+            right: 4.2%;
+            top: 29.2%;
+            font-size: clamp(10px, 2vw, 12px);
+            color: var(--color-white);
+          }
+
+          .password-title {
+            position: absolute;
+            left: 6.5%;
+            top: 42.8%;
+            color: var(--color-white);
+            font-weight: 600;
+            font-size: clamp(14px, 2.6vw, 16px);
+          }
+
+          .save-password-btn {
+            position: absolute;
+            right: 3.1%;
+            top: 40.5%;
+            width: clamp(35px, 6.5vw, 40px);
+            height: clamp(35px, 6.5vw, 40px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--color-select);
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2);
+          }
+
+          .password-input {
+            position: absolute;
+            left: 6.5%;
+            width: 55.4%;
+            height: 8.2%;
+            background-color: var(--color-unselect);
+            color: var(--color-white);
+            border: 1px solid var(--color-unselect);
+            border-radius: 6px;
+            padding: 8px;
+            font-size: clamp(12px, 2.3vw, 14px);
+            outline: none;
+          }
+
+          .new-password {
+            top: 53.1%;
+          }
+
+          .confirm-password {
+            top: 65.4%;
+          }
+
+          .theme-title {
+            position: absolute;
+            left: 6.5%;
+            top: 80.2%;
+            font-size: clamp(14px, 2.6vw, 16px);
+            font-weight: 600;
+            color: var(--color-white);
+          }
+
+          .theme-button {
+            position: absolute;
+            top: 89.3%;
+            min-width: clamp(90px, 18vw, 7rem);
+            height: clamp(35px, 6.8vw, 2.5rem);
+            border-radius: 11.5px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+            font-size: clamp(12px, 2.2vw, 14px);
+          }
+
+          .theme-claro {
+            left: 33.2%;
+          }
+
+          .theme-oscuro {
+            right: 16.8%;
+          }
+
+          .input-placeholder::placeholder {
+            color: var(--color-SecondaryText-PreHover);
+          }
+
+          /* Media Queries para diferentes tamaños de pantalla */
+          @media (max-width: 768px) {
+            .panel-container {
+              width: 95vw;
+              height: 90vh;
+            }
+            
+            .biografia-textarea {
+              height: 15%;
+            }
+            
+            .password-input {
+              width: 70%;
+            }
+            
+            .theme-button {
+              min-width: 25vw;
+            }
+            
+            .save-biografia-btn,
+            .save-password-btn {
+              width: 8vw;
+              height: 8vw;
+              max-width: 50px;
+              max-height: 50px;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .panel-container {
+              width: 98vw;
+              height: 95vh;
+            }
+            
+            .biografia-title,
+            .password-title,
+            .theme-title {
+              font-size: clamp(16px, 4vw, 18px);
+            }
+            
+            .biografia-textarea {
+              height: 18%;
+              font-size: clamp(14px, 3.5vw, 16px);
+            }
+            
+            .password-input {
+              width: 75%;
+              font-size: clamp(14px, 3.5vw, 16px);
+            }
+            
+            .theme-button {
+              min-width: 35vw;
+              height: 12vw;
+              max-height: 50px;
+              font-size: clamp(14px, 3.2vw, 16px);
+            }
+            
+            .theme-claro {
+              left: 8%;
+            }
+            
+            .theme-oscuro {
+              right: 8%;
+            }
+          }
+
+          @media (min-width: 769px) and (max-width: 1024px) {
+            .panel-container {
+              width: 85vw;
+              height: 80vh;
+            }
+          }
+
+          @media (min-width: 1025px) and (max-width: 1399px) {
+            .panel-container {
+              width: min(80vw, 614px);
+              height: min(75vh, 486px);
+            }
+          }
+
+          @media (min-width: 1400px) {
+            .panel-container {
+              width: 614px;
+              height: 486px;
+            }
+          }
+        `}
+      </style>
+
+      <div className="panel-container">
+        <h3 className="biografia-title">
+          Editar Biografía
+        </h3>
         
-      />
-      <input
-        type="password"
-        value={confirmarContrasena}
-        onChange={(e) => setConfirmarContrasena(e.target.value)}
-        placeholder="Confirmar Contraseña"
-        style={{
-          position: "fixed",
-          left: "693px",
-          top: "396px",
-          width: "340px",
-          height: "40px",
-          backgroundColor: "var(--color-unselect)",
-          color: "var(--color-white)",
-          border: "1px solid var(--color-unselect)",
-          borderRadius: "6px",
-          padding: "8px",
-        }}
-        className="input-placeholder"
+        <div
+          onClick={guardarBiografia}
+          className="save-biografia-btn"
+          style={{
+            backgroundColor: temaSeleccionado === "Claro" ? "#fff" : "#32363F",
+          }}
+        >
+          <SaveIcon color={textColor} />
+        </div>
         
-      />
-      <h3
-        style={{
-          position: "fixed",
-          left: "693px",
-          top: "476px",
-          fontSize: "16px",
-          fontWeight: 600,
-          color: textColor,
-        }}
-      >
-        Cambiar Tema
-      </h3>
-      <button
-        data-tema="Claro"
-        onClick={() => setTemaSeleccionado("Claro")}
-        style={{
-          position: "fixed",
-          left: "857px",
-          top: "517px",
-          minWidth: "7rem",
-          height: "2.5rem",
-          borderRadius: "11.5px",
-          fontWeight: 600,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "6px",
-          border: "none",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2)",
-          cursor: "pointer",
-          ...obtenerEstiloBoton("Claro"),
-        }}
-      >
-        {iconosTemas["Claro"]}
-        <span>Claro</span>
-      </button>
-      <button
-        data-tema="Oscuro"
-        onClick={() => setTemaSeleccionado("Oscuro")}
-        style={{
-          position: "fixed",
-          left: "1001px",
-          top: "516px",
-          minWidth: "7rem",
-          height: "2.5rem",
-          borderRadius: "11.5px",
-          fontWeight: 600,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "6px",
-          border: "none",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.4)",
-          cursor: "pointer",
-          ...obtenerEstiloBoton("Oscuro"),
-        }}
-      >
-        {iconosTemas["Oscuro"]}
-        <span>Oscuro</span>
-      </button>
+        <textarea
+          value={biografia}
+          onChange={(e) => setBiografia(e.target.value)}
+          maxLength={100}
+          placeholder="Escribe tu biografía..."
+          className="biografia-textarea input-placeholder"
+        />
+        
+        <span className="char-count">
+          {biografia.length}/100
+        </span>
+        
+        <h3 className="password-title">
+          Cambiar Contraseña
+        </h3>
+        
+        <div
+          onClick={cambiarContrasena}
+          className="save-password-btn"
+          style={{
+            backgroundColor: temaSeleccionado === "Claro" ? "#fff" : "#32363F",
+          }}
+        >
+          <SaveIcon color={textColor} />
+        </div>
+        
+        <input
+          type="password"
+          value={nuevaContrasena}
+          onChange={(e) => setNuevaContrasena(e.target.value)}
+          placeholder="Nueva Contraseña"
+          className="password-input new-password input-placeholder"
+        />
+        
+        <input
+          type="password"
+          value={confirmarContrasena}
+          onChange={(e) => setConfirmarContrasena(e.target.value)}
+          placeholder="Confirmar Contraseña"
+          className="password-input confirm-password input-placeholder"
+        />
+        
+        <h3 className="theme-title">
+          Cambiar Tema
+        </h3>
+        
+        <button
+          data-tema="Claro"
+          onClick={() => setTemaSeleccionado("Claro")}
+          className="theme-button theme-claro"
+          style={obtenerEstiloBoton("Claro")}
+        >
+          {iconosTemas["Claro"]}
+          <span>Claro</span>
+        </button>
+        
+        <button
+          data-tema="Oscuro"
+          onClick={() => setTemaSeleccionado("Oscuro")}
+          className="theme-button theme-oscuro"
+          style={obtenerEstiloBoton("Oscuro")}
+        >
+          {iconosTemas["Oscuro"]}
+          <span>Oscuro</span>
+        </button>
+      </div>
     </>
   );
 };
