@@ -22,16 +22,8 @@ const SeguidosSection = () => (
 const PerfilSection = () => <PostCard />;
 
 const ConfigurarSection = () => (
-  <div 
-    style={{
-      position: 'absolute',
-      top: '91px',   // distancia Y
-      left: '653px', // distancia X
-      zIndex: 50
-    }}
-  >
+
     <PanelConfiguracion />
-  </div>
 );
 
 
