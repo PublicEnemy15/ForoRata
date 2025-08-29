@@ -39,7 +39,6 @@ const SaveIcon = ({ color = "currentColor" }) => (
 );
 
 const PanelConfiguracion = () => {
-  // Estado usando memoria en lugar de localStorage para Claude.ai
   const [biografia, setBiografia] = useState("¡increí!");
   const [nuevaContrasena, setNuevaContrasena] = useState("");
   const [confirmarContrasena, setConfirmarContrasena] = useState("");
@@ -78,7 +77,6 @@ const PanelConfiguracion = () => {
   }, [temaSeleccionado]);
 
   const guardarBiografia = () => {
-    // En implementación real usarías localStorage
     alert('Biografía guardada correctamente');
   };
 
@@ -273,61 +271,36 @@ const PanelConfiguracion = () => {
             color: var(--color-SecondaryText-PreHover);
           }
 
-          /* Media Queries para diferentes tamaños de pantalla */
-          @media (max-width: 768px) {
-            .panel-container {
-              width: 95vw;
-              height: 90vh;
-            }
-            
-            .biografia-textarea {
-              height: 15%;
-            }
-            
-            .password-input {
-              width: 70%;
-            }
-            
-            .theme-button {
-              min-width: 25vw;
-            }
-            
-            .save-biografia-btn,
-            .save-password-btn {
-              width: 8vw;
-              height: 8vw;
-              max-width: 50px;
-              max-height: 50px;
-            }
-          }
-
+          /* Media Queries responsivas consistentes */
           @media (max-width: 480px) {
             .panel-container {
-              width: 98vw;
-              height: 95vh;
+              width: 95vw;
+              max-width: none;
+              height: auto;
+              min-height: 400px;
             }
             
             .biografia-title,
             .password-title,
             .theme-title {
-              font-size: clamp(16px, 4vw, 18px);
+              font-size: 16px;
             }
             
             .biografia-textarea {
-              height: 18%;
-              font-size: clamp(14px, 3.5vw, 16px);
+              height: 80px;
+              font-size: 14px;
             }
             
             .password-input {
               width: 75%;
-              font-size: clamp(14px, 3.5vw, 16px);
+              height: 40px;
+              font-size: 14px;
             }
             
             .theme-button {
-              min-width: 35vw;
-              height: 12vw;
-              max-height: 50px;
-              font-size: clamp(14px, 3.2vw, 16px);
+              min-width: 120px;
+              height: 40px;
+              font-size: 14px;
             }
             
             .theme-claro {
@@ -337,23 +310,44 @@ const PanelConfiguracion = () => {
             .theme-oscuro {
               right: 8%;
             }
+
+            .save-biografia-btn,
+            .save-password-btn {
+              width: 40px;
+              height: 40px;
+            }
+          }
+
+          @media (min-width: 481px) and (max-width: 768px) {
+            .panel-container {
+              width: 90vw;
+              max-width: 500px;
+              height: auto;
+              min-height: 450px;
+            }
+            
+            .biografia-textarea {
+              height: 70px;
+            }
+            
+            .password-input {
+              width: 70%;
+            }
+            
+            .theme-button {
+              min-width: 25vw;
+            }
           }
 
           @media (min-width: 769px) and (max-width: 1024px) {
             .panel-container {
-              width: 85vw;
-              height: 80vh;
+              width: 80vw;
+              max-width: 600px;
+              height: 480px;
             }
           }
 
-          @media (min-width: 1025px) and (max-width: 1399px) {
-            .panel-container {
-              width: min(80vw, 614px);
-              height: min(75vh, 486px);
-            }
-          }
-
-          @media (min-width: 1400px) {
+          @media (min-width: 1025px) {
             .panel-container {
               width: 614px;
               height: 486px;
