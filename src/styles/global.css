@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
-@theme {
+@theme{
 
     --color-accent1: #73A7DD;
     --color-accent2: #D868A0;
-
+    --color-accent3: #E28EB8;
     --color-background: #1B1B1F;
     --color-CardBackground: #202127;
     --color-unselect: #32363F;
@@ -20,4 +20,5 @@
 body {
     font-family: var(--default-font);
     background-color: var(--color-background);
+    
 }

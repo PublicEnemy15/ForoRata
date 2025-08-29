@@ -1,0 +1,18 @@
+---
+import PanelConfiguracion from '@/components/Main/PanelConfiguracion';
+import Header from "@/components/Common/Header.astro"
+import "@/styles/global.css"
+import '@fontsource/cascadia-mono/400.css';
+import '@fontsource/cascadia-mono/500.css';
+import '@fontsource/cascadia-mono/600.css';
+---
+
+<html>
+<head>
+    <title>Configuracion</title>
+</head>
+<body>
+    <Header />
+    <PanelConfiguracion client:load />
+</body>
+</html>
