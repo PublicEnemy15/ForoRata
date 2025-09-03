@@ -28,10 +28,10 @@ const FollowCard = () => {
         {/* Ratita en SVG */}
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
-          width="40" 
-          height="40" 
+          width="32" 
+          height="32" 
           viewBox="0 0 24 24"
-          className="text-white"
+          className="text-white sm:w-10 sm:h-10"
         >
           <g 
             fill="none" 
@@ -46,7 +46,7 @@ const FollowCard = () => {
           </g>
         </svg>
 
-        <span className="text-base font-medium" style={{ color: 'var(--color-white)' }}>
+        <span className="text-sm sm:text-base font-medium" style={{ color: 'var(--color-white)' }}>
           Tus Últimos Seguidores
         </span>
       </div>
@@ -56,14 +56,14 @@ const FollowCard = () => {
         {followers.map((follower) => (
           <div 
             key={follower.id}
-            className="rounded-lg px-5 py-3 flex items-center justify-between transition-all duration-200 hover:brightness-110"
+            className="rounded-lg px-3 sm:px-5 py-3 flex items-center justify-between transition-all duration-200 hover:brightness-110"
             style={{ 
               backgroundColor: '#202127',
               boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'
             }}
           >
             {/* Avatar y nombre */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
               <div className="flex items-center justify-center">
                 <svg 
                   xmlns="http://www.w3.org/2000/svg" 
@@ -73,14 +73,14 @@ const FollowCard = () => {
                   strokeWidth="1" 
                   strokeLinecap="round" 
                   strokeLinejoin="round" 
-                  className="w-12 h-12 text-white"
+                  className="w-10 h-10 sm:w-12 sm:h-12 text-white"
                 >
                   <circle cx="12" cy="12" r="10"/>
                   <circle cx="12" cy="10" r="3"/>
                   <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/>
                 </svg>
               </div>
-              <span className="text-sm font-medium" style={{ color: 'var(--color-white)' }}>
+              <span className="text-sm font-medium truncate" style={{ color: 'var(--color-white)' }}>
                 {follower.username}
               </span>
             </div>
@@ -88,7 +88,7 @@ const FollowCard = () => {
             {/* Botón seguir*/}
             <button
               onClick={() => toggleFollow(follower.id)}
-              className="flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-300 hover:opacity-80"
+              className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg transition-all duration-300 hover:opacity-80"
               style={{
                 backgroundColor: follower.isFollowing ? '#4CAF50' : '#32363F',
                 boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'
@@ -99,30 +99,30 @@ const FollowCard = () => {
                 // Icono de check si ya sigue
                 <svg 
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20" 
-                  height="20" 
+                  width="16" 
+                  height="16" 
                   viewBox="0 0 24 24"
                   fill="none" 
                   stroke="currentColor" 
                   strokeWidth="2" 
                   strokeLinecap="round" 
                   strokeLinejoin="round"
-                  className="text-white"
+                  className="text-white sm:w-5 sm:h-5"
                 >
                   <path d="M5 13l4 4L19 7" />
                 </svg>
               ) : (
                 <svg 
                   xmlns="http://www.w3.org/2000/svg" 
-                  width="20" 
-                  height="20" 
+                  width="16" 
+                  height="16" 
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke="currentColor" 
                   strokeWidth="2" 
                   strokeLinecap="round" 
                   strokeLinejoin="round"
-                  className="text-white"
+                  className="text-white sm:w-5 sm:h-5"
                 >
                   <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                   <circle cx="8.5" cy="7" r="4"/>

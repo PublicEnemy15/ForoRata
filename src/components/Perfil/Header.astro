@@ -1,0 +1,195 @@
+---
+import { Image } from 'astro:assets';
+import SearchBar from '../Common/SearchBar';
+import MainContainer from '../Main/MainContainer';
+import FollowCard from './FollowCard';
+import Menu from './Menu';
+import SmallRatLogo from '../../assets/imagenes/ratas/SmallRat.webp';
+---
+
+<header   
+  class="fixed top-0 left-0 right-0 z-[10000] flex h-16 items-center justify-center bg-background shadow-[0_4px_8px_0_rgba(0,0,0,0.8)]" 
+>   
+  <MainContainer>
+    <div class="grid grid-cols-[auto_1fr_auto] md:grid-cols-[280px_1fr_280px] lg:grid-cols-[360px_1fr_360px] gap-2 md:gap-6 lg:gap-[30px] items-center w-full">
+      
+      {/* Columna izquierda: Logo + Botón Menú (mobile) */}
+      <div class="flex items-center gap-2">
+        {/* Botón Menú (solo mobile/tablet) */}
+        <button
+          id="menu-options-btn"
+          class="lg:hidden flex items-center justify-center p-2 rounded-lg transition-all duration-200 bg-[#32363F] shadow-[0_2px_4px_rgba(0,0,0,0.6)] hover:brightness-110"
+          aria-label="Abrir menú de opciones"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="text-white">
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+              <path d="M3 12h18M3 6h18M3 18h18"/>
+            </g>
+          </svg>
+        </button>
+
+        {/* Logo */}
+        <a href="/" aria-label="Ir a inicio" class="flex items-center gap-1 md:gap-2 no-underline">       
+          <Image
+            src={SmallRatLogo}
+            alt="Logo Rata"
+            class="block h-8 w-8 md:h-10 md:w-10"
+            width={40}
+            height={40}
+            loading="eager"
+            decoding="sync"
+          />       
+          <span class="default-font text-white text-lg md:text-4xl lg:text-5xl font-bold leading-6 md:leading-10 hidden sm:block">         
+            ForoRata       
+          </span>     
+        </a>
+      </div>
+
+      {/* Columna central: SearchBar (solo visible en desktop) */}
+      <div class="hidden lg:flex justify-center">
+        <div class="w-[614px]">
+          <SearchBar client:load />
+        </div>
+      </div>
+
+      {/* Columna derecha: Hola usuario + Botón Seguidores */}
+      <div class="flex items-center justify-end gap-2">
+        <span class="default-font text-white text-sm md:text-base lg:text-lg font-medium">
+          Hola, usuario
+        </span>
+
+        <button
+          id="followers-btn"
+          class="lg:hidden flex items-center justify-center p-2 rounded-lg transition-all duration-200 bg-[#32363F] shadow-[0_2px_4px_rgba(0,0,0,0.6)] hover:brightness-110"
+          aria-label="Ver últimos seguidores"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="text-white">
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+              <path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0-8 0M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2m1-17.87a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85"/>
+            </g>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </MainContainer>
+
+  {/* SearchBar móvil */}
+  <div class="lg:hidden fixed top-16 left-0 right-0 bg-background border-t border-gray-700 p-3 z-[9999] shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
+    <div class="max-w-lg mx-auto">
+      <SearchBar client:load />
+    </div>
+  </div>
+</header>
+
+{/* Panel lateral izquierdo - Menú de Opciones */}
+<div id="menu-options-panel" class="lg:hidden fixed top-0 left-0 h-full w-80 bg-background shadow-[5px_0_15px_rgba(0,0,0,0.9),10px_0_25px_rgba(0,0,0,0.6)] z-[10002] transform -translate-x-full transition-transform duration-300 ease-in-out">
+  <div class="p-6 h-full overflow-y-auto">
+    <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-600">
+      <h3 class="text-xl font-bold text-white">Menú</h3>
+      <button id="close-menu-panel-btn" class="text-white text-2xl hover:text-gray-300 transition-colors" aria-label="Cerrar menú">×</button>
+    </div>
+    <div class="w-full">
+      <Menu 
+        client:load 
+        activeSection={null}
+        setActiveSection={null}
+        userData={JSON.stringify({
+          username: "Username",
+          followers: 137,
+          following: 547
+        })}
+      />
+    </div>
+  </div>
+</div>
+
+{/* Modal Últimos Seguidores */}
+<div id="followers-modal" class="lg:hidden fixed top-0 right-0 h-full w-80 bg-background shadow-[-5px_0_15px_rgba(0,0,0,0.9),-10px_0_25px_rgba(0,0,0,0.6)] z-[10002] transform translate-x-full transition-transform duration-300 ease-in-out">
+  <div class="p-6 h-full overflow-y-auto">
+    <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-600">
+      <h3 class="text-xl font-bold text-white">Últimos Seguidores</h3>
+      <button id="close-followers-btn" class="text-white text-2xl hover:text-gray-300 transition-colors" aria-label="Cerrar seguidores">×</button>
+    </div>
+    <div class="w-full">
+      <FollowCard client:load />
+    </div>
+  </div>
+</div>
+
+<div id="panels-overlay" class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-[10001] hidden"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const menuBtn = document.getElementById('menu-options-btn');
+    const followersBtn = document.getElementById('followers-btn');
+    const menuPanel = document.getElementById('menu-options-panel');
+    const followersModal = document.getElementById('followers-modal');
+    const overlay = document.getElementById('panels-overlay');
+    const closeMenuBtn = document.getElementById('close-menu-panel-btn');
+    const closeFollowersBtn = document.getElementById('close-followers-btn');
+
+    function closeAllPanels() {
+      menuPanel?.classList.add('-translate-x-full');
+      followersModal?.classList.add('translate-x-full');
+      overlay?.classList.add('hidden');
+      menuBtn?.style.setProperty('background-color', '#32363F');
+      followersBtn?.style.setProperty('background-color', '#32363F');
+    }
+
+    menuBtn?.addEventListener('click', function() {
+      if (menuPanel?.classList.contains('-translate-x-full')) {
+        closeAllPanels();
+        setTimeout(() => {
+          menuPanel.classList.remove('-translate-x-full');
+          overlay?.classList.remove('hidden');
+          menuBtn.style.setProperty('background-color', 'var(--color-accent2)');
+        }, 50);
+      } else {
+        closeAllPanels();
+      }
+    });
+
+    followersBtn?.addEventListener('click', function() {
+      if (followersModal?.classList.contains('translate-x-full')) {
+        closeAllPanels();
+        setTimeout(() => {
+          followersModal.classList.remove('translate-x-full');
+          overlay?.classList.remove('hidden');
+          followersBtn.style.setProperty('background-color', 'var(--color-accent2)');
+        }, 50);
+      } else {
+        closeAllPanels();
+      }
+    });
+
+    closeMenuBtn?.addEventListener('click', closeAllPanels);
+    closeFollowersBtn?.addEventListener('click', closeAllPanels);
+    overlay?.addEventListener('click', closeAllPanels);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeAllPanels();
+      }
+    });
+  });
+</script>
+
+<style>
+  #menu-options-panel,
+  #followers-modal {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  #menu-options-btn:hover,
+  #followers-btn:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 640px) {
+    #menu-options-panel,
+    #followers-modal {
+      width: 90vw;
+      max-width: 320px;
+    }
+  }
+</style>
