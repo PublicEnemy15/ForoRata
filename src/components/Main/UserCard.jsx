@@ -43,7 +43,7 @@ const UserCard = () => {
               cuenta puedes
             </p>
             <a
-              href="/login"
+              href="/register"
               className={`${baseButtonClasses} border-accent1 bg-background text-white hover:bg-accent1 focus:ring-accent1-300`}
               style={{
                 boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)',

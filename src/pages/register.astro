@@ -1,0 +1,51 @@
+---
+import '@fontsource/cascadia-mono/400.css';
+import '@fontsource/cascadia-mono/500.css';
+import '@fontsource/cascadia-mono/600.css';
+
+import { Image } from "astro:assets";
+import "../styles/global.css"
+import RegisterCard from "../components/Auth/RegisterCard"
+import MainContainer from "@/components/Main/MainContainer"
+import SmallRatLogo from "../assets/imagenes/ratas/SmallRat.webp";
+
+---
+
+<html lang="es">
+  <header
+    class="fixed top-0 left-0 right-0 z-[10000] flex h-16 items-center justify-center bg-background shadow-[0_0_5px_1px_rgba(0,0,0,1),0_0_10px_3px_rgba(0,0,0,0.8),0_0_20px_5px_rgba(0,0,0,0.5)]">
+
+    <MainContainer>
+        <div class="flex items-center justify-start w-full">
+        <a
+          href="/"
+          aria-label="Ir a inicio"
+          class="flex items-center gap-2 no-underline"
+          data-track="event"
+          data-category="Navigation"
+          data-target="GoTo-Home"
+          data-origin="from: header"
+        >
+          <Image
+            src={SmallRatLogo}
+            alt="Logo Rata"
+            class="block h-10 w-10"
+            width={40}
+            height={40}
+            loading="eager"
+            decoding="sync"
+          />
+          <span class="--default-font text-white text-5xl font-bold leading-10">
+            ForoRata
+          </span>
+        </a>
+        </div>  
+    </MainContainer>
+    <meta charset="utf-8" />
+    <title>RegistroForoRata</title>
+  </head>
+
+  <body>
+    <RegisterCard client:only="react" />
+  </body>
+</html>
