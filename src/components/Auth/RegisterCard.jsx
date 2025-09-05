@@ -6,7 +6,7 @@ function Card() {
 
   return (
     <div className="flex h-screen ">
-      <div className="bg-[#202127] rounded-[20px] shadow-5xl w-[460px] h-[594px] mx-[730px] my-[278px] text-center shadow-[0_6px_10px_rgba(0,0,0,0.5)]">
+      <div className="bg-[#202127] rounded-[20px] shadow-5xl w-[460px] h-[594px] mx-[730px] my-[100px] text-center shadow-[0_6px_10px_rgba(0,0,0,0.5)]">
 
         <h2 className="text-white font-bold whitespace-nowrap text-[32px] mx-[105px] my-[60px]">Regístrate</h2>
 
