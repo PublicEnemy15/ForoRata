@@ -2,43 +2,34 @@ import React, { useState, useEffect } from 'react';
 import PostCard from '../Perfil/PostCard';
 import FollowCard from '../Perfil/FollowCard';
 import SidebarMenu from './Menu';
+import PanelConfiguracion from '../Main/PanelConfiguracion';
 
 // Secciones
 const InicioSection = () => (
-  <div className="w-full rounded-lg p-4 sm:p-6 mt-20 sm:mt-24 lg:mt-0" style={{backgroundColor: '#202127', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'}}>
+  <div className="w-full rounded-lg p-4 sm:p-6 mt-20 sm:mt-24 lg:mt-0" style={{
+    backgroundColor: 'var(--color-CardBackground)', // CAMBIADO: era '#202127'
+    boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'
+  }}>
     <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{color: 'var(--color-white)'}}>🏠 Inicio</h2>
     <p className="text-sm sm:text-base" style={{color: 'var(--color-white)'}}>Bienvenido a la sección de inicio. Aquí verás las últimas actualizaciones y contenido principal.</p>
   </div>
 );
 
 const SeguidosSection = () => (
-  <div className="w-full rounded-lg p-4 sm:p-6 mt-20 sm:mt-24 lg:mt-0" style={{backgroundColor: '#202127', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'}}>
+  <div className="w-full rounded-lg p-4 sm:p-6 mt-20 sm:mt-24 lg:mt-0" style={{backgroundColor: 'var(--color-CardBackground)', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'}}>
     <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{color: 'var(--color-white)'}}>👥 Seguidos</h2>
     <p className="text-sm sm:text-base" style={{color: 'var(--color-white)'}}>Aquí podrás ver las publicaciones de las personas que sigues.</p>
   </div>
 );
 
-
 const PerfilSection = () => <PostCard />;
 
 const ConfigurarSection = () => (
-  <div className="w-full rounded-lg p-4 sm:p-6 mt-20 sm:mt-24 lg:mt-0" style={{backgroundColor: '#202127', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'}}>
-    <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{color: 'var(--color-white)'}}>⚙️ Configuración</h2>
-    <div className="space-y-4">
-      <div className="p-3 sm:p-4 rounded-lg" style={{backgroundColor: 'var(--color-unselect)'}}>
-        <h3 className="font-semibold mb-2 text-sm sm:text-base" style={{color: 'var(--color-white)'}}>Privacidad</h3>
-        <p className="text-xs sm:text-sm" style={{color: 'var(--color-SecondaryText-PreHover)'}}>Configura tus opciones de privacidad</p>
-      </div>
-      <div className="p-3 sm:p-4 rounded-lg" style={{backgroundColor: 'var(--color-unselect)'}}>
-        <h3 className="font-semibold mb-2 text-sm sm:text-base" style={{color: 'var(--color-white)'}}>Notificaciones</h3>
-        <p className="text-xs sm:text-sm" style={{color: 'var(--color-SecondaryText-PreHover)'}}>Gestiona tus notificaciones</p>
-      </div>
-    </div>
-  </div>
+  <PanelConfiguracion />
 );
 
 const SalirSection = () => (
-  <div className="w-full rounded-lg p-4 sm:p-6 mt-20 sm:mt-24 lg:mt-0" style={{backgroundColor: '#202127', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'}}>
+  <div className="w-full rounded-lg p-4 sm:p-6 mt-20 sm:mt-24 lg:mt-0" style={{backgroundColor: 'var(--color-CardBackground)', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'}}>
     <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{color: 'var(--color-white)'}}>🚪 Salir</h2>
     <p className="text-sm sm:text-base mb-4" style={{color: 'var(--color-white)'}}>¿Estás seguro que quieres cerrar sesión?</p>
     <button 
@@ -55,8 +46,9 @@ const SalirSection = () => (
     </button>
   </div>
 );
+
 const PostSection = () => (
-  <div className="w-full rounded-lg p-4 sm:p-6 mt-20 sm:mt-24 lg:mt-0" style={{backgroundColor: '#202127', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'}}>
+  <div className="w-full rounded-lg p-4 sm:p-6 mt-20 sm:mt-24 lg:mt-0" style={{backgroundColor: 'var(--color-CardBackground)', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'}}>
     <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{color: 'var(--color-white)'}}>✍️ Crear Post</h2>
     <p className="text-sm sm:text-base" style={{color: 'var(--color-white)'}}>Aquí podrás crear y publicar nuevos posts.</p>
     {/* Aquí irá el contenido del post */}

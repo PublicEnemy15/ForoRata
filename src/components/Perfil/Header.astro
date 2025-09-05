@@ -11,7 +11,7 @@ import SmallRatLogo from '../../assets/imagenes/ratas/SmallRat.webp';
   class="fixed top-0 left-0 right-0 z-[10000] flex h-16 items-center justify-center bg-background shadow-[0_4px_8px_0_rgba(0,0,0,0.8)]" 
 >   
   <MainContainer>
-    <div class="grid grid-cols-[auto_1fr_auto] md:grid-cols-[280px_1fr_280px] lg:grid-cols-[360px_1fr_360px] gap-2 md:gap-6 lg:gap-[30px] items-center w-full">
+    <div class="grid grid-cols-[auto_1fr_auto] gap-2 md:gap-4 lg:gap-6 items-center w-full">
       
       {/* Columna izquierda: Logo + Botón Menú (mobile) */}
       <div class="flex items-center gap-2">
@@ -39,22 +39,22 @@ import SmallRatLogo from '../../assets/imagenes/ratas/SmallRat.webp';
             loading="eager"
             decoding="sync"
           />       
-          <span class="default-font text-white text-lg md:text-4xl lg:text-5xl font-bold leading-6 md:leading-10 hidden sm:block">         
+          <span class="default-font text-white text-lg md:text-2xl lg:text-4xl xl:text-5xl font-bold leading-6 md:leading-8 lg:leading-10 hidden sm:block">         
             ForoRata       
           </span>     
         </a>
       </div>
 
-      {/* Columna central: SearchBar (solo visible en desktop) */}
-      <div class="hidden lg:flex justify-center">
-        <div class="w-[614px]">
+      {/* Columna central: SearchBar (responsivo) */}
+      <div class="flex justify-center min-w-0">
+        <div class="w-full max-w-[200px] sm:max-w-[280px] md:max-w-[400px] lg:max-w-[500px] xl:max-w-[614px]">
           <SearchBar client:load />
         </div>
       </div>
 
       {/* Columna derecha: Hola usuario + Botón Seguidores */}
       <div class="flex items-center justify-end gap-2">
-        <span class="default-font text-white text-sm md:text-base lg:text-lg font-medium">
+        <span class="default-font text-white text-xs sm:text-sm md:text-base lg:text-lg font-medium whitespace-nowrap">
           Hola, usuario
         </span>
 
@@ -72,13 +72,6 @@ import SmallRatLogo from '../../assets/imagenes/ratas/SmallRat.webp';
       </div>
     </div>
   </MainContainer>
-
-  {/* SearchBar móvil */}
-  <div class="lg:hidden fixed top-16 left-0 right-0 bg-background border-t border-gray-700 p-3 z-[9999] shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
-    <div class="max-w-lg mx-auto">
-      <SearchBar client:load />
-    </div>
-  </div>
 </header>
 
 {/* Panel lateral izquierdo - Menú de Opciones */}

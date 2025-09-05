@@ -52,7 +52,7 @@ const Menu = ({ activeSection: externalActiveSection, setActiveSection: external
   const getButtonStyle = (section) => {
     const isActive = activeSection === section;
     return {
-      backgroundColor: isActive ? 'var(--color-accent2)' : '#32363F',
+      backgroundColor: isActive ? 'var(--color-accent2)' : 'var(--color-unselect)', // Cambiado aquí
       color: 'var(--color-white)',
       boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)',
       borderRadius: '50px',
@@ -111,7 +111,7 @@ const Menu = ({ activeSection: externalActiveSection, setActiveSection: external
         setTimeout(() => {
           menuPanel.classList.add('-translate-x-full');
           overlay.classList.add('hidden');
-          menuBtn.style.setProperty('background-color', '#32363F');
+          menuBtn.style.setProperty('background-color', 'var(--color-unselect)'); // Cambiado aquí también
         }, 300);
       }
     }
@@ -122,7 +122,7 @@ const Menu = ({ activeSection: externalActiveSection, setActiveSection: external
       {/* --- Tarjeta 1: Info usuario + estadísticas --- */}
       <div
         style={{
-          backgroundColor: '#202127',
+          backgroundColor: 'var(--color-CardBackground)', // Cambiado de #202127
           borderRadius: '10px',
           boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)',
           padding: '30px 24px',
@@ -139,7 +139,8 @@ const Menu = ({ activeSection: externalActiveSection, setActiveSection: external
                 strokeWidth="1" 
                 strokeLinecap="round" 
                 strokeLinejoin="round" 
-                className="w-12 h-12 text-white"
+                className="w-12 h-12"
+                style={{ color: 'var(--color-white)' }} // Agregado style
               >
                 <circle cx="12" cy="12" r="10"/>
                 <circle cx="12" cy="10" r="3"/>
@@ -181,7 +182,7 @@ const Menu = ({ activeSection: externalActiveSection, setActiveSection: external
       {/* --- Tarjeta 2: Menú de navegación --- */}
       <div
         style={{
-          backgroundColor: '#202127',
+          backgroundColor: 'var(--color-CardBackground)', // Cambiado de #202127
           borderRadius: '10px',
           boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)',
           padding: '20px',

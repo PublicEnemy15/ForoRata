@@ -21,7 +21,7 @@ const FollowCard = () => {
       <div 
         className="rounded-lg px-4 py-4 flex items-center justify-center gap-3"
         style={{ 
-          backgroundColor: '#32363F', 
+          backgroundColor: 'var(--color-unselect)', 
           boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)' 
         }}
       >
@@ -31,7 +31,8 @@ const FollowCard = () => {
           width="32" 
           height="32" 
           viewBox="0 0 24 24"
-          className="text-white sm:w-10 sm:h-10"
+          className="sm:w-10 sm:h-10"
+          style={{ color: 'var(--color-white)' }}
         >
           <g 
             fill="none" 
@@ -58,7 +59,7 @@ const FollowCard = () => {
             key={follower.id}
             className="rounded-lg px-3 sm:px-5 py-3 flex items-center justify-between transition-all duration-200 hover:brightness-110"
             style={{ 
-              backgroundColor: '#202127',
+              backgroundColor: 'var(--color-CardBackground)',
               boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'
             }}
           >
@@ -73,7 +74,8 @@ const FollowCard = () => {
                   strokeWidth="1" 
                   strokeLinecap="round" 
                   strokeLinejoin="round" 
-                  className="w-10 h-10 sm:w-12 sm:h-12 text-white"
+                  className="w-10 h-10 sm:w-12 sm:h-12"
+                  style={{ color: 'var(--color-white)' }}
                 >
                   <circle cx="12" cy="12" r="10"/>
                   <circle cx="12" cy="10" r="3"/>
@@ -90,7 +92,7 @@ const FollowCard = () => {
               onClick={() => toggleFollow(follower.id)}
               className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg transition-all duration-300 hover:opacity-80"
               style={{
-                backgroundColor: follower.isFollowing ? '#4CAF50' : '#32363F',
+                backgroundColor: follower.isFollowing ? '#4CAF50' : 'var(--color-unselect)',
                 boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'
               }}
               aria-label={follower.isFollowing ? "Dejar de seguir" : "Seguir"}
@@ -107,7 +109,8 @@ const FollowCard = () => {
                   strokeWidth="2" 
                   strokeLinecap="round" 
                   strokeLinejoin="round"
-                  className="text-white sm:w-5 sm:h-5"
+                  className="sm:w-5 sm:h-5"
+                  style={{ color: 'var(--color-white)' }}
                 >
                   <path d="M5 13l4 4L19 7" />
                 </svg>
@@ -122,7 +125,8 @@ const FollowCard = () => {
                   strokeWidth="2" 
                   strokeLinecap="round" 
                   strokeLinejoin="round"
-                  className="text-white sm:w-5 sm:h-5"
+                  className="sm:w-5 sm:h-5"
+                  style={{ color: 'var(--color-white)' }}
                 >
                   <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                   <circle cx="8.5" cy="7" r="4"/>

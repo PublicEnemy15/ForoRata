@@ -7,7 +7,7 @@ function Card() {
 
   return (
     <div className="flex h-screen ">
-      <div className="bg-[#202127] rounded-[20px] shadow-5xl w-[460px] h-[524px] mx-[730px] my-[278px] text-center shadow-[0_6px_10px_rgba(0,0,0,0.5)]">
+      <div className="bg-[#202127] rounded-[20px] shadow-5xl w-[460px] h-[524px] mx-[730px] my-[100px] text-center shadow-[0_6px_10px_rgba(0,0,0,0.5)]">
 
         <h2 className="text-white font-bold whitespace-nowrap text-[32px] mx-[105px] my-[60px]">Inicia Sesión</h2>
 
@@ -31,7 +31,6 @@ function Card() {
         >
           {isLoading ? "Cargando..." : "Iniciar Sesión"}
         </Button>
-
         {/* Botón Google */}
         <button
           onClick={() => loginWithRedirect({authorizationParams:{connection:"google-oauth2"}})}
@@ -44,12 +43,10 @@ function Card() {
           />
           Google
         </button>
-
         {/* Enlace registro */}
         <p className="text-gray-400 text-xs mt-2">
           <a href="/register" className="text-blue-400 text-[15px]"><u>Regístrate</u></a> <a className="text-white text-[15px]">si aún no tienes una cuenta</a>
         </p>
-
         {/* Errores */}
         {error && (
           <p className="text-red-400 text-sm mt-4">
@@ -60,7 +57,6 @@ function Card() {
     </div>
   );
 }
-
 export default function LoginCard() {
   const domain = import.meta.env.PUBLIC_AUTH0_DOMAIN;
   const clientId = import.meta.env.PUBLIC_AUTH0_CLIENT_ID;
