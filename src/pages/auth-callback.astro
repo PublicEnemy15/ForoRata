@@ -107,89 +107,136 @@
 // @ts-nocheck
 import { createClient } from '@supabase/supabase-js';
 
+console.log('=== INICIO DEBUG AUTH CALLBACK ===');
+
 const supabaseUrl = "https://umoiqpsvrnfyqgdzxcjm.supabase.co";
 const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtb2lxcHN2cm5meXFnZHp4Y2ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0NDAzNzgsImV4cCI6MjA3MzAxNjM3OH0.fLwtrQJOOWh3_DevTdvrRlB3AgcY5UWBJnGDAX2OUcI";
+
+console.log('1. Creando cliente de Supabase...');
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+console.log('2. Cliente creado correctamente');
 
+const statusP = document.getElementById("status");
+const messageModal = document.getElementById("messageModal");
+const messageIcon = document.getElementById("messageIcon");
+const messageTitle = document.getElementById("messageTitle");
+const messageText = document.getElementById("messageText");
+
+console.log('3. Elementos del DOM obtenidos');
+
+function showMessage(type, title, message, redirectUrl, delay = 4000) {
+    console.log('showMessage llamado:', { type, title, message, redirectUrl, delay });
+    document.getElementById("loading").style.display = "none";
+    
+    if (type === "success") {
+        messageIcon.innerHTML = "✓";
+        messageIcon.style.background = "linear-gradient(135deg, #4CAF50, #45a049)";
+        messageTitle.style.color = "#4CAF50";
+    } else {
+        messageIcon.innerHTML = "✕";
+        messageIcon.style.background = "linear-gradient(135deg, #f44336, #d32f2f)";
+        messageTitle.style.color = "#f44336";
+    }
+    
+    messageTitle.textContent = title;
+    messageText.textContent = message;
+    messageModal.style.display = "flex";
+    messageModal.querySelector("div").classList.add("fade-in");
+    
+    setTimeout(() => {
+        console.log('Redirigiendo a:', redirectUrl);
+        window.location.href = redirectUrl;
+    }, delay);
+}
+
+async function handleAuthCallback() {
+    try {
+        console.log('4. Iniciando handleAuthCallback...');
+        console.log('5. URL actual:', window.location.href);
+        console.log('6. Hash:', window.location.hash);
+        console.log('7. Search:', window.location.search);
         
-        const statusP = document.getElementById("status");
-        const messageModal = document.getElementById("messageModal");
-        const messageIcon = document.getElementById("messageIcon");
-        const messageTitle = document.getElementById("messageTitle");
-        const messageText = document.getElementById("messageText");
+        console.log('8. Llamando a supabase.auth.getSession()...');
+        const { data, error } = await supabase.auth.getSession();
         
-        function showMessage(type, title, message, redirectUrl, delay = 4000) {
-            document.getElementById("loading").style.display = "none";
-            
-            if (type === "success") {
-                messageIcon.innerHTML = "✓";
-                messageIcon.style.background = "linear-gradient(135deg, #4CAF50, #45a049)";
-                messageTitle.style.color = "#4CAF50";
-            } else {
-                messageIcon.innerHTML = "✕";
-                messageIcon.style.background = "linear-gradient(135deg, #f44336, #d32f2f)";
-                messageTitle.style.color = "#f44336";
-            }
-            
-            messageTitle.textContent = title;
-            messageText.textContent = message;
-            messageModal.style.display = "flex";
-            messageModal.querySelector("div").classList.add("fade-in");
-            
-            setTimeout(() => {
-                window.location.href = redirectUrl;
-            }, delay);
+        console.log('9. Respuesta de getSession:', { 
+            hasData: !!data, 
+            hasSession: !!data?.session,
+            hasError: !!error,
+            error: error 
+        });
+        
+        if (error) {
+            console.error('10. Error detectado en getSession:', error);
+            showMessage("error", "Error de Autenticación", "Hubo un problema con la autenticación. Inténtalo de nuevo.", "/login", 3000);
+            return;
         }
         
-        async function handleAuthCallback() {
-            try {
-                const { data, error } = await supabase.auth.getSession();
+        if (data.session) {
+            console.log('11. Sesión encontrada');
+            const user = data.session.user;
+            console.log('12. Usuario:', {
+                id: user.id,
+                email: user.email,
+                created_at: user.created_at,
+                full_name: user.user_metadata?.full_name
+            });
+            
+            const authMode = localStorage.getItem("authMode");
+            console.log('13. Modo de autenticación:', authMode);
+            
+            const userCreatedAt = new Date(user.created_at);
+            const now = new Date();
+            const timeDiff = (now - userCreatedAt) / 1000;
+            console.log('14. Diferencia de tiempo:', timeDiff, 'segundos');
+            
+            if (authMode === "register") {
+                console.log('15. Procesando REGISTRO...');
+                localStorage.removeItem("authMode");
                 
-                if (error) {
-                    showMessage("error", "Error de Autenticación", "Hubo un problema con la autenticación. Inténtalo de nuevo.", "/login", 3000);
-                    return;
-                }
-                
-                if (data.session) {
-                    const user = data.session.user;
-                    const authMode = localStorage.getItem("authMode");
-                    
-                    const userCreatedAt = new Date(user.created_at);
-                    const now = new Date();
-                    const timeDiff = (now - userCreatedAt) / 1000;
-                    
-                    if (authMode === "register") {
-                        localStorage.removeItem("authMode");
-                        
-                        if (timeDiff < 30) {
-                            showMessage("success", "¡Registro Exitoso!", "¡Felicidades! Te has registrado con Google exitosamente. Ahora puedes iniciar sesión.", "/login", 4000);
-                        } else {
-                            showMessage("error", "Usuario Ya Registrado", "Este correo ya está registrado. Ve al inicio de sesión para acceder a tu cuenta.", "/register", 4000);
-                            await supabase.auth.signOut();
-                        }
-                    } else if (authMode === "login") {
-                        localStorage.removeItem("authMode");
-                        
-                        if (timeDiff < 30) {
-                            showMessage("error", "Usuario No Registrado", "Este correo o usuario no está registrado. Por favor, regístrate primero para crear tu cuenta.", "/login", 4000);
-                            await supabase.auth.signOut();
-                        } else {
-                            const userName = user.user_metadata?.full_name || user.email.split("@")[0];
-                            showMessage("success", "¡Bienvenido!", `¡Hola ${userName}! Has iniciado sesión correctamente. Serás redirigido a tu perfil.`, "/Perfil", 3000);
-                        }
-                    } else {
-                        showMessage("error", "Error de Sesión", "No se pudo determinar el tipo de autenticación. Inténtalo de nuevo.", "/login", 3000);
-                    }
+                if (timeDiff < 30) {
+                    console.log('16. Usuario NUEVO - registro exitoso');
+                    showMessage("success", "¡Registro Exitoso!", "¡Felicidades! Te has registrado con Google exitosamente. Ahora puedes iniciar sesión.", "/login", 4000);
                 } else {
-                    showMessage("error", "Sin Sesión", "No se encontró una sesión activa. Inténtalo de nuevo.", "/login", 3000);
+                    console.log('17. Usuario EXISTENTE - ya registrado');
+                    showMessage("error", "Usuario Ya Registrado", "Este correo ya está registrado. Ve al inicio de sesión para acceder a tu cuenta.", "/register", 4000);
+                    await supabase.auth.signOut();
                 }
-            } catch (error) {
-                console.error('Error completo:', error);
-                showMessage("error", "Error Inesperado", "Ocurrió un error procesando la autenticación. Inténtalo de nuevo.", "/login", 3000);
+            } else if (authMode === "login") {
+                console.log('18. Procesando LOGIN...');
+                localStorage.removeItem("authMode");
+                
+                if (timeDiff < 30) {
+                    console.log('19. Usuario NUEVO intentando login - debe registrarse');
+                    showMessage("error", "Usuario No Registrado", "Este correo o usuario no está registrado. Por favor, regístrate primero para crear tu cuenta.", "/login", 4000);
+                    await supabase.auth.signOut();
+                } else {
+                    console.log('20. Usuario EXISTENTE - login exitoso');
+                    const userName = user.user_metadata?.full_name || user.email.split("@")[0];
+                    console.log('21. Nombre de usuario:', userName);
+                    showMessage("success", "¡Bienvenido!", `¡Hola ${userName}! Has iniciado sesión correctamente. Serás redirigido a tu perfil.`, "/Perfil", 3000);
+                }
+            } else {
+                console.log('22. No hay modo de autenticación definido');
+                showMessage("error", "Error de Sesión", "No se pudo determinar el tipo de autenticación. Inténtalo de nuevo.", "/login", 3000);
             }
+        } else {
+            console.log('23. No se encontró sesión');
+            showMessage("error", "Sin Sesión", "No se encontró una sesión activa. Inténtalo de nuevo.", "/login", 3000);
         }
+    } catch (error) {
+        console.error('=== ERROR EN CATCH ===');
+        console.error('Error completo:', error);
+        console.error('Error name:', error?.name);
+        console.error('Error message:', error?.message);
+        console.error('Error stack:', error?.stack);
+        console.error('Tipo de error:', typeof error);
+        showMessage("error", "Error Inesperado", "Ocurrió un error procesando la autenticación. Inténtalo de nuevo.", "/login", 3000);
+    }
+}
 
-        handleAuthCallback();
+console.log('24. Ejecutando handleAuthCallback...');
+handleAuthCallback();
     </script>
 </body>
 </html>
