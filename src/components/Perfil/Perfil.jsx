@@ -3,7 +3,7 @@ import PostCard from '../Perfil/PostCard';
 import FollowCard from '../Perfil/FollowCard';
 import SidebarMenu from './Menu';
 import PanelConfiguracion from '../Main/PanelConfiguracion';
-
+import { supabase } from "/src/lib/supabaseClient.js";
 // Secciones
 const InicioSection = () => (
   <div className="w-full rounded-lg p-4 sm:p-6 mt-20 sm:mt-24 lg:mt-0" style={{
@@ -28,24 +28,66 @@ const ConfigurarSection = () => (
   <PanelConfiguracion />
 );
 
-const SalirSection = () => (
-  <div className="w-full rounded-lg p-4 sm:p-6 mt-20 sm:mt-24 lg:mt-0" style={{backgroundColor: 'var(--color-CardBackground)', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'}}>
-    <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{color: 'var(--color-white)'}}>🚪 Salir</h2>
-    <p className="text-sm sm:text-base mb-4" style={{color: 'var(--color-white)'}}>¿Estás seguro que quieres cerrar sesión?</p>
-    <button 
-      className="px-4 sm:px-6 py-2 rounded-lg transition-colors font-bold text-sm sm:text-base"
-      style={{
-        backgroundColor: '#dc2626',
-        color: 'var(--color-white)',
-        boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'
-      }}
-      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#b91c1c'}
-      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#dc2626'}
-    >
-      Cerrar Sesión
-    </button>
-  </div>
-);
+const SalirSection = () => {
+  const [loading, setLoading] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      setLoading(true);
+      
+      // Cerrar sesión en Supabase
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) {
+        console.error('Error cerrando sesión:', error);
+        alert('Error al cerrar sesión. Inténtalo de nuevo.');
+        return;
+      }
+
+      // Limpiar cualquier dato de localStorage
+      localStorage.removeItem('authMode');
+      localStorage.removeItem('authMessage');
+      
+      // Redirigir a la página principal
+      window.location.href = '/';
+      
+    } catch (error) {
+      console.error('Error inesperado:', error);
+      alert('Error inesperado. Inténtalo de nuevo.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="w-full rounded-lg p-4 sm:p-6 mt-20 sm:mt-24 lg:mt-0" style={{backgroundColor: 'var(--color-CardBackground)', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'}}>
+      <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{color: 'var(--color-white)'}}>🚪 Salir</h2>
+      <p className="text-sm sm:text-base mb-4" style={{color: 'var(--color-white)'}}>¿Estás seguro que quieres cerrar sesión?</p>
+      <button 
+        onClick={handleLogout}
+        disabled={loading}
+        className="px-4 sm:px-6 py-2 rounded-lg transition-colors font-bold text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+        style={{
+          backgroundColor: loading ? '#9ca3af' : '#dc2626',
+          color: 'var(--color-white)',
+          boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'
+        }}
+        onMouseEnter={(e) => {
+          if (!loading) {
+            e.currentTarget.style.backgroundColor = '#b91c1c';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!loading) {
+            e.currentTarget.style.backgroundColor = '#dc2626';
+          }
+        }}
+      >
+        {loading ? 'Cerrando...' : 'Cerrar Sesión'}
+      </button>
+    </div>
+  );
+};
 
 const PostSection = () => (
   <div className="w-full rounded-lg p-4 sm:p-6 mt-20 sm:mt-24 lg:mt-0" style={{backgroundColor: 'var(--color-CardBackground)', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.6)'}}>

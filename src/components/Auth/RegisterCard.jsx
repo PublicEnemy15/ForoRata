@@ -1,78 +1,142 @@
-import React from "react";
-import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "../../lib/supabaseClient";
 
 function Card() {
-  const { loginWithRedirect, isLoading, error } = useAuth0();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  // 🔹 Limpiar mensajes después de 5 segundos
+  useEffect(() => {
+    if (error || successMessage) {
+      const timer = setTimeout(() => {
+        setError(null);
+        setSuccessMessage(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, successMessage]);
+
+  // 🔹 Verificar mensajes de autenticación al cargar
+  useEffect(() => {
+    const authMessage = localStorage.getItem('authMessage');
+    if (authMessage) {
+      const [type, message] = authMessage.split('|');
+      if (type === 'success') {
+        setSuccessMessage(message);
+      } else if (type === 'error') {
+        setError(message);
+      }
+      localStorage.removeItem('authMessage');
+    }
+  }, []);
+
+  // 🔹 Registro con Google
+  const handleGoogleRegister = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      setSuccessMessage(null);
+
+      // Guardar que estamos en modo registro
+      localStorage.setItem('authMode', 'register');
+
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + '/auth-callback'
+        }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+    } catch (error) {
+      console.error("Error en registro con Google:", error);
+      setError("Error al conectar con Google. Inténtalo de nuevo.");
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex h-screen ">
-      <div className="bg-[#202127] rounded-[20px] shadow-5xl w-[460px] h-[594px] mx-[730px] my-[80px] text-center shadow-[0_6px_10px_rgba(0,0,0,0.5)]">
-
-        <h2 className="text-white font-bold whitespace-nowrap text-[32px] mx-[105px] my-[60px]">Regístrate</h2>
+      <div className="bg-[#202127] rounded-[20px] shadow-5xl w-[460px] h-[594px] mx-[730px] my-[100px] text-center shadow-[0_6px_10px_rgba(0,0,0,0.5)]">
+        <h2 className="text-white font-bold whitespace-nowrap text-[32px] mx-[105px] my-[60px]">
+          Regístrate
+        </h2>
 
         {/* Inputs */}
         <input
           type="text"
           placeholder="Nombre de usuario"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           className="text-white font-bold text-[18px] w-[340px] h-[40px] p-[20px] mb-[30px] rounded-[10px] bg-[#32363F] focus:placeholder-transparent"
         />
         <input
           type="email"
           placeholder="Correo"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="text-white font-bold text-[18px] w-[340px] h-[40px] p-[20px] mb-[30px] rounded-[10px] bg-[#32363F] focus:placeholder-transparent"
         />
         <input
           type="password"
           placeholder="Contraseña"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           className="text-white font-bold text-[18px] w-[340px] h-[40px] p-[20px] mb-[30px] rounded-[10px] bg-[#32363F] focus:placeholder-transparent"
         />
 
-        {/* Botón registro */}
+        {/* Botón registro manual */}
         <button
-          disabled={isLoading}
-          //onClick={() =>
-            //loginWithRedirect({
-              //authorizationParams: {
-                //screen_hint: "signup", // signup abre el flujo de regisrto de Auth0
-              //},
-            //})
-          //}
-          className="w-[176px] h-[40px] mx-[142px] mb-[20px] text-[18px] flex items-center justify-center bg-[#1B1B1F] hover:bg-neutral-800 text-white rounded-[20px] shadow-[0_6px_10px_rgba(0,0,0,0.6)] border-[#73A7DD] border-[2px]"
+          disabled={loading}
+          onClick={() => {
+            console.log("Botón de registro manual presionado (sin acción).");
+          }}
+          className="w-[176px] h-[40px] mx-[142px] mb-[20px] text-[18px] flex items-center justify-center bg-[#1B1B1F] hover:bg-[#73A7DD] text-white rounded-[20px] shadow-[0_6px_10px_rgba(0,0,0,0.6)] border-[#73A7DD] border-[2px] disabled:opacity-50"
         >
-          {isLoading ? "Cargando..." : "Registrarte"}
+          {loading ? "Cargando..." : "Registrarte"}
         </button>
 
         {/* Botón Google */}
         <button
-          onClick={() =>
-            loginWithRedirect({
-              authorizationParams: {
-                connection: "google-oauth2",
-                screen_hint: "signup", // también abre registro con Google
-              },
-            })
-          }
-          className="w-[176px] h-[40px] mx-[142px] mb-[40px] text-[18px] flex items-center justify-center bg-[#1B1B1F] hover:bg-neutral-800 text-white rounded-[20px] shadow-[0_6px_10px_rgba(0,0,0,0.6)] "
+          onClick={handleGoogleRegister}
+          disabled={loading}
+          className="w-[176px] h-[40px] mx-[142px] mb-[40px] text-[18px] flex items-center justify-center bg-[#1B1B1F] hover:bg-neutral-800 text-white rounded-[20px] shadow-[0_6px_10px_rgba(0,0,0,0.6)] disabled:opacity-50"
         >
           <img
             src="https://www.svgrepo.com/show/355037/google.svg"
             alt="Google"
             className="w-5 h-5 mr-2"
           />
-          Google
+          {loading ? "Procesando..." : "Google"}
         </button>
 
         {/* Enlace login */}
         <p className="text-gray-400 text-xs mt-2">
-          <a href="/login" className="text-[#D868A0] text-[15px]"><u>Inicia Sesión</u></a>{" "}
+          <a href="/login" className="text-[#D868A0] text-[15px]">
+            <u>Inicia Sesión</u>
+          </a>{" "}
           <a className="text-white text-[15px]">si ya tienes una cuenta</a>
         </p>
 
+        {/* Mensajes de éxito */}
+        {successMessage && (
+          <div className="bg-green-600 text-white text-sm mt-4 p-3 rounded-lg mx-4">
+            {successMessage}
+          </div>
+        )}
+
         {/* Errores */}
         {error && (
-          <p className="text-red-400 text-sm mt-4">
-            Error: {error.message}
-          </p>
+          <div className="bg-red-600 text-white text-sm mt-4 p-3 rounded-lg mx-4">
+            {error}
+          </div>
         )}
       </div>
     </div>
@@ -80,21 +144,9 @@ function Card() {
 }
 
 export default function RegisterCard() {
-  const domain = import.meta.env.PUBLIC_AUTH0_DOMAIN;
-  const clientId = import.meta.env.PUBLIC_AUTH0_CLIENT_ID;
-  const redirectUri =
-    import.meta.env.PUBLIC_AUTH0_REDIRECT_URI || window.location.origin;
-
   return (
-    <Auth0Provider
-      domain={domain}
-      clientId={clientId}
-      authorizationParams={{ redirect_uri: redirectUri }}
-      cacheLocation="localstorage"
-    >
-      <div className="flex justify-center items-center h-screen">
-        <Card />
-      </div>
-    </Auth0Provider>
+    <div className="flex justify-center items-center h-screen">
+      <Card />
+    </div>
   );
 }

@@ -1,9 +1,66 @@
-import React from "react";
-import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "../../lib/supabaseClient";
 import Button from "../Common/Button";
 
 function Card() {
-  const { loginWithRedirect, isLoading, error } = useAuth0();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  // 🔹 Limpiar mensajes después de 5 segundos
+  useEffect(() => {
+    if (error || successMessage) {
+      const timer = setTimeout(() => {
+        setError(null);
+        setSuccessMessage(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, successMessage]);
+
+  // 🔹 Verificar mensajes de autenticación al cargar
+  useEffect(() => {
+    const authMessage = localStorage.getItem('authMessage');
+    if (authMessage) {
+      const [type, message] = authMessage.split('|');
+      if (type === 'success') {
+        setSuccessMessage(message);
+      } else if (type === 'error') {
+        setError(message);
+      }
+      localStorage.removeItem('authMessage');
+    }
+  }, []);
+
+  // 🔹 Iniciar sesión con Google
+  const handleGoogleLogin = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      setSuccessMessage(null);
+
+      // Guardar que estamos en modo login
+      localStorage.setItem('authMode', 'login');
+
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + '/auth-callback'
+        }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+    } catch (error) {
+      console.error("Error en login con Google:", error);
+      setError("Error al conectar con Google. Inténtalo de nuevo.");
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex h-screen ">
@@ -13,66 +70,72 @@ function Card() {
 
         {/* Inputs */}
         <input
-          type="text"
-          placeholder="Nombre de usuario"
+          type="email"
+          placeholder="Correo electrónico"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="text-white font-bold text-[18px] w-[340px] h-[40px] p-[20px] mb-[30px] rounded-[10px] bg-[#32363F] focus:placeholder-transparent"
         />
         <input
           type="password"
           placeholder="Contraseña"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           className="text-white font-bold text-[18px] w-[340px] h-[40px] p-[20px] mb-[30px] rounded-[10px] bg-[#32363F] focus:placeholder-transparent"
         />
 
-        {/* Botón iniciar sesión */}
+        {/* Botón iniciar sesión manual */}
         <Button
-          disabled={isLoading}
-          //onClick={() => loginWithRedirect()}
-          className="w-[176px] h-[40px] mx-[142px] mb-[20px] text-[18px] font-bold bg-gradient-to-r from-[#1B1B1F] to-[#1B1B1F] hover:from-[#D868A0] hover:to-[#D868A0] rounded transition shadow-[0_6px_10px_rgba(0,0,0,0.4)]"
+          disabled={loading}
+          onClick={() => {
+            console.log("Botón de login manual presionado (sin acción).");
+          }}
+          className="w-[176px] h-[40px] mx-[142px] mb-[20px] text-[18px] font-bold bg-gradient-to-r from-[#1B1B1F] to-[#1B1B1F] hover:from-[#D868A0] hover:to-[#D868A0] rounded transition shadow-[0_6px_10px_rgba(0,0,0,0.4)] disabled:opacity-50"
         >
-          {isLoading ? "Cargando..." : "Iniciar Sesión"}
+          {loading ? "Cargando..." : "Iniciar Sesión"}
         </Button>
+
         {/* Botón Google */}
         <button
-          onClick={() => loginWithRedirect({authorizationParams:{connection:"google-oauth2"}})}
-          className="w-[176px] h-[40px] mx-[142px] mb-[40px] text-[18px] flex items-center justify-center bg-[#1B1B1F] hover:bg-neutral-800 text-white rounded-[20px] shadow-[0_6px_10px_rgba(0,0,0,0.6)] "
+          onClick={handleGoogleLogin}
+          disabled={loading}
+          className="w-[176px] h-[40px] mx-[142px] mb-[40px] text-[18px] flex items-center justify-center bg-[#1B1B1F] hover:bg-neutral-800 text-white rounded-[20px] shadow-[0_6px_10px_rgba(0,0,0,0.6)] disabled:opacity-50"
         >
           <img
             src="https://www.svgrepo.com/show/355037/google.svg"
             alt="Google"
-            className="w-5 h-5"
+            className="w-5 h-5 mr-2"
           />
-          Google
+          {loading ? "Procesando..." : "Google"}
         </button>
+
         {/* Enlace registro */}
         <p className="text-gray-400 text-xs mt-2">
           <a href="/register" className="text-blue-400 text-[15px]"><u>Regístrate</u></a> <a className="text-white text-[15px]">si aún no tienes una cuenta</a>
         </p>
+
+        {/* Mensajes de éxito */}
+        {successMessage && (
+          <div className="bg-green-600 text-white text-sm mt-4 p-3 rounded-lg mx-4">
+            {successMessage}
+          </div>
+        )}
+
         {/* Errores */}
         {error && (
-          <p className="text-red-400 text-sm mt-4">
-            Error: {error.message}
-          </p>
+          <div className="bg-red-600 text-white text-sm mt-4 p-3 rounded-lg mx-4">
+            {error}
+          </div>
         )}
       </div>
     </div>
   );
 }
-export default function LoginCard() {
-  const domain = import.meta.env.PUBLIC_AUTH0_DOMAIN;
-  const clientId = import.meta.env.PUBLIC_AUTH0_CLIENT_ID;
-  const redirectUri =
-    import.meta.env.PUBLIC_AUTH0_REDIRECT_URI || window.location.origin;
 
+export default function LoginCard() {
   return (
-    <Auth0Provider
-      domain={domain}
-      clientId={clientId}
-      authorizationParams={{ redirect_uri: redirectUri }}
-      cacheLocation="localstorage"
-    >
-      <div className="flex justify-center items-center h-screen">
-        <Card />
-      </div>
-    </Auth0Provider>
+    <div className="flex justify-center items-center h-screen">
+      <Card />
+    </div>
   );
 }

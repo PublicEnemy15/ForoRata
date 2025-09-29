@@ -1,0 +1,204 @@
+---
+// src/pages/auth-callback.astro
+---
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procesando...</title>
+</head>
+<body>
+    <div id="loading" style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #1a1a1a;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    ">
+        <div>
+            <div id="spinner" style="
+                width: 50px;
+                height: 50px;
+                border: 5px solid #333;
+                border-top: 5px solid #73A7DD;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                margin: 0 auto 20px;
+            "></div>
+            <p id="status">Procesando autenticación...</p>
+        </div>
+    </div>
+
+    <!-- Modal para mostrar mensajes -->
+    <div id="messageModal" style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    ">
+        <div style="
+            background: #202127;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            margin: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        ">
+            <div id="messageIcon" style="
+                width: 80px;
+                height: 80px;
+                margin: 0 auto 20px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 40px;
+            "></div>
+            <h2 id="messageTitle" style="
+                color: white;
+                font-size: 24px;
+                margin-bottom: 15px;
+                font-weight: bold;
+            "></h2>
+            <p id="messageText" style="
+                color: #ccc;
+                font-size: 16px;
+                line-height: 1.5;
+                margin-bottom: 20px;
+            "></p>
+            <div style="
+                width: 30px;
+                height: 4px;
+                background: #73A7DD;
+                margin: 0 auto;
+                border-radius: 2px;
+            "></div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
+
+    <script type="module">
+        const statusP = document.getElementById("status");
+        const spinner = document.getElementById("spinner");
+        const messageModal = document.getElementById("messageModal");
+        const messageIcon = document.getElementById("messageIcon");
+        const messageTitle = document.getElementById("messageTitle");
+        const messageText = document.getElementById("messageText");
+        
+        function showMessage(type, title, message, redirectUrl, delay = 4000) {
+            // Ocultar loading
+            document.getElementById("loading").style.display = "none";
+            
+            // Configurar el modal según el tipo
+            if (type === "success") {
+                messageIcon.innerHTML = "✓";
+                messageIcon.style.background = "linear-gradient(135deg, #4CAF50, #45a049)";
+                messageTitle.style.color = "#4CAF50";
+            } else {
+                messageIcon.innerHTML = "✕";
+                messageIcon.style.background = "linear-gradient(135deg, #f44336, #d32f2f)";
+                messageTitle.style.color = "#f44336";
+            }
+            
+            messageTitle.textContent = title;
+            messageText.textContent = message;
+            
+            // Mostrar modal con animación
+            messageModal.style.display = "flex";
+            messageModal.querySelector("div").classList.add("fade-in");
+            
+            // Redirigir después del delay
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, delay);
+        }
+        
+        async function handleAuthCallback() {
+            try {
+                // Importar supabase
+                const { supabase } = await import("/src/lib/supabaseClient.js");
+                
+                // Obtener sesión
+                const { data, error } = await supabase.auth.getSession();
+                
+                if (error) {
+                    showMessage("error", "Error de Autenticación", "Hubo un problema con la autenticación. Inténtalo de nuevo.", "/login", 3000);
+                    return;
+                }
+                
+                if (data.session) {
+                    const user = data.session.user;
+                    const authMode = localStorage.getItem("authMode");
+                    
+                    // Verificar si es usuario nuevo (menos de 30 segundos)
+                    const userCreatedAt = new Date(user.created_at);
+                    const now = new Date();
+                    const timeDiff = (now - userCreatedAt) / 1000;
+                    
+                    if (authMode === "register") {
+                        localStorage.removeItem("authMode");
+                        
+                        if (timeDiff < 30) {
+                            // Usuario nuevo - registro exitoso
+                            showMessage("success", "¡Registro Exitoso!", "¡Felicidades! Te has registrado con Google exitosamente. Ahora puedes iniciar sesión.", "/login", 4000);
+                        } else {
+                            // Usuario existente
+                            showMessage("error", "Usuario Ya Registrado", "Este correo ya está registrado. Ve al inicio de sesión para acceder a tu cuenta.", "/register", 4000);
+                            await supabase.auth.signOut();
+                        }
+                    } else if (authMode === "login") {
+                        localStorage.removeItem("authMode");
+                        
+                        if (timeDiff < 30) {
+                            // Usuario nuevo intentando login
+                            showMessage("error", "Usuario No Registrado", "Este correo o usuario no está registrado. Por favor, regístrate primero para crear tu cuenta.", "/login", 4000);
+                            await supabase.auth.signOut();
+                        } else {
+                            // Login exitoso
+                            const userName = user.user_metadata?.full_name || user.email.split("@")[0];
+                            showMessage("success", "¡Bienvenido!", `¡Hola ${userName}! Has iniciado sesión correctamente. Serás redirigido a tu perfil.`, "/Perfil", 3000);
+                        }
+                    } else {
+                        // No hay modo definido
+                        showMessage("error", "Error de Sesión", "No se pudo determinar el tipo de autenticación. Inténtalo de nuevo.", "/login", 3000);
+                    }
+                } else {
+                    // No hay sesión
+                    showMessage("error", "Sin Sesión", "No se encontró una sesión activa. Inténtalo de nuevo.", "/login", 3000);
+                }
+            } catch (error) {
+                showMessage("error", "Error Inesperado", "Ocurrió un error procesando la autenticación. Inténtalo de nuevo.", "/login", 3000);
+            }
+        }
+
+        // Ejecutar cuando la página se carga
+        handleAuthCallback();
+    </script>
+</body>
+</html>
