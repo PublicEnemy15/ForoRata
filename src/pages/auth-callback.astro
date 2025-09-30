@@ -103,19 +103,24 @@
         }
     </style>
 
-    <script type="module">
+    <script>
+// @ts-nocheck
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = "https://umoiqpsvrnfyqgdzxcjm.supabase.co";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtb2lxcHN2cm5meXFnZHp4Y2ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0NDAzNzgsImV4cCI6MjA3MzAxNjM3OH0.fLwtrQJOOWh3_DevTdvrRlB3AgcY5UWBJnGDAX2OUcI";
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+        
         const statusP = document.getElementById("status");
-        const spinner = document.getElementById("spinner");
         const messageModal = document.getElementById("messageModal");
         const messageIcon = document.getElementById("messageIcon");
         const messageTitle = document.getElementById("messageTitle");
         const messageText = document.getElementById("messageText");
         
         function showMessage(type, title, message, redirectUrl, delay = 4000) {
-            // Ocultar loading
             document.getElementById("loading").style.display = "none";
             
-            // Configurar el modal según el tipo
             if (type === "success") {
                 messageIcon.innerHTML = "✓";
                 messageIcon.style.background = "linear-gradient(135deg, #4CAF50, #45a049)";
@@ -128,12 +133,9 @@
             
             messageTitle.textContent = title;
             messageText.textContent = message;
-            
-            // Mostrar modal con animación
             messageModal.style.display = "flex";
             messageModal.querySelector("div").classList.add("fade-in");
             
-            // Redirigir después del delay
             setTimeout(() => {
                 window.location.href = redirectUrl;
             }, delay);
@@ -141,10 +143,6 @@
         
         async function handleAuthCallback() {
             try {
-                // Importar supabase
-                const { supabase } = await import("@/lib/supabaseClient.js");
-                
-                // Obtener sesión
                 const { data, error } = await supabase.auth.getSession();
                 
                 if (error) {
@@ -156,7 +154,6 @@
                     const user = data.session.user;
                     const authMode = localStorage.getItem("authMode");
                     
-                    // Verificar si es usuario nuevo (menos de 30 segundos)
                     const userCreatedAt = new Date(user.created_at);
                     const now = new Date();
                     const timeDiff = (now - userCreatedAt) / 1000;
@@ -165,10 +162,8 @@
                         localStorage.removeItem("authMode");
                         
                         if (timeDiff < 30) {
-                            // Usuario nuevo - registro exitoso
                             showMessage("success", "¡Registro Exitoso!", "¡Felicidades! Te has registrado con Google exitosamente. Ahora puedes iniciar sesión.", "/login", 4000);
                         } else {
-                            // Usuario existente
                             showMessage("error", "Usuario Ya Registrado", "Este correo ya está registrado. Ve al inicio de sesión para acceder a tu cuenta.", "/register", 4000);
                             await supabase.auth.signOut();
                         }
@@ -176,28 +171,24 @@
                         localStorage.removeItem("authMode");
                         
                         if (timeDiff < 30) {
-                            // Usuario nuevo intentando login
                             showMessage("error", "Usuario No Registrado", "Este correo o usuario no está registrado. Por favor, regístrate primero para crear tu cuenta.", "/login", 4000);
                             await supabase.auth.signOut();
                         } else {
-                            // Login exitoso
                             const userName = user.user_metadata?.full_name || user.email.split("@")[0];
                             showMessage("success", "¡Bienvenido!", `¡Hola ${userName}! Has iniciado sesión correctamente. Serás redirigido a tu perfil.`, "/Perfil", 3000);
                         }
                     } else {
-                        // No hay modo definido
                         showMessage("error", "Error de Sesión", "No se pudo determinar el tipo de autenticación. Inténtalo de nuevo.", "/login", 3000);
                     }
                 } else {
-                    // No hay sesión
                     showMessage("error", "Sin Sesión", "No se encontró una sesión activa. Inténtalo de nuevo.", "/login", 3000);
                 }
             } catch (error) {
+                console.error('Error completo:', error);
                 showMessage("error", "Error Inesperado", "Ocurrió un error procesando la autenticación. Inténtalo de nuevo.", "/login", 3000);
             }
         }
 
-        // Ejecutar cuando la página se carga
         handleAuthCallback();
     </script>
 </body>
