@@ -142,7 +142,7 @@
         async function handleAuthCallback() {
             try {
                 // Importar supabase
-                const { supabase } = await import("/src/lib/supabaseClient.js");
+                const { supabase } = await import("@/lib/supabaseClient.js");
                 
                 // Obtener sesión
                 const { data, error } = await supabase.auth.getSession();
