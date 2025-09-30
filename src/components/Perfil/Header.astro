@@ -168,48 +168,55 @@ import SmallRatLogo from '../../assets/imagenes/ratas/SmallRat.webp';
 </script>
 
 <!-- Script para manejar el nombre del usuario -->
-<script type="module">
+<script>
+  import { supabase } from '../../lib/supabaseClient';
+
   async function updateUserGreeting() {
     try {
-      // Importar supabase
-      const { supabase } = await import("/src/lib/supabaseClient.js");
+      console.log("Obteniendo sesión para header...");
       
-      // Obtener la sesión actual
       const { data, error } = await supabase.auth.getSession();
+      
+      console.log("Sesión en header:", data);
+      
+      if (error) {
+        console.error("Error en getSession:", error);
+        return;
+      }
       
       if (data.session && data.session.user) {
         const user = data.session.user;
         
-        // Extraer el nombre del usuario
         let userName = 'usuario';
         
         if (user.user_metadata?.full_name) {
-          // Si tiene nombre completo de Google, usar solo el primer nombre
           userName = user.user_metadata.full_name.split(' ')[0];
         } else if (user.email) {
-          // Si no, usar la parte antes del @ del email
           userName = user.email.split('@')[0];
         }
         
-        // Actualizar el texto del saludo
+        console.log("Nombre del usuario:", userName);
+        
         const greetingElement = document.getElementById('user-greeting');
         if (greetingElement) {
           greetingElement.textContent = `Hola, ${userName}`;
+          console.log("Header actualizado correctamente");
         }
+      } else {
+        console.log("No hay sesión activa");
       }
-      // Si no hay sesión, mantener "Hola, usuario"
       
     } catch (error) {
       console.error('Error obteniendo información del usuario:', error);
-      // En caso de error, mantener "Hola, usuario"
     }
   }
 
-  // Ejecutar cuando se carga la página
-  updateUserGreeting();
-
-  // También escuchar cambios en la autenticación
-  document.addEventListener('supabase:auth-change', updateUserGreeting);
+  // Ejecutar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateUserGreeting);
+  } else {
+    updateUserGreeting();
+  }
 </script>
 
 <style>
